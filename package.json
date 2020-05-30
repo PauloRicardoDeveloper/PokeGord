@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/NoPastel/PokeGord#readme",
   "dependencies": {
-    "discord.js": "^12.2.0"
+    "eris": "^0.13.1"
   }
 }
