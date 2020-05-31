@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/NoPastel/PokeGord#readme",
   "dependencies": {
-    "eris": "^0.13.1"
+    "eris": "^0.13.1",
+    "node-fetch": "^2.6.0",
+    "pokedex-promise-v2": "^3.2.0"
   }
 }

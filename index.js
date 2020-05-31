@@ -1,5 +1,7 @@
 //Import Discord Libs and setup the Client
 var Eris = require("eris");
+const Pokedex = require('pokedex-promise-v2');
+const pokedex = new Pokedex();
 var client = new Eris.CommandClient(require("./config.json").token, {}, {
 	prefix: "p!",
 	defaultHelpCommand: false
@@ -17,23 +19,28 @@ fs.readdir("./comandos", (err, f) => {
 })
 
 //Test da pokedex:
-var {pokemonB} = require("./utils/pokedexAPI.js");
 client.on("messageCreate", async msg => {
-	if(msg.content.startsWith("poke")){
-		pokemonB(msg.content.split(" ")[1].toLowerCase()).then(a => {
+	if (msg.content.startsWith("poke")) {
+		try {
+			const pokemon = await pokedex.getPokemonByName(msg.content.split(" ")[1].toLowerCase());
+			console.log(pokemon)
 			msg.channel.createMessage({
 				embed: {
 					title: "Pokemon Info",
-					description: a.nome,
+					description: pokemon.name,
 					thumbnail: {
-						url: a.img
+						url: pokemon.sprites.front_shiny
 					},
 					image: {
-						url: `https://img.pokemondb.net/artwork/${a.nome.toLowerCase()}.jpg`
+						url: `https://img.pokemondb.net/artwork/${pokemon.name.toLowerCase()}.jpg`
 					}
 				}
 			})
-		});
+		} catch (error) {
+			if(error.response.status === 404)
+				msg.channel.createMessage('Não encontrei esse pokemon')
+			else msg.channel.createMessage('Erro ' + error.response.status)
+		}
 	}
 });
 
