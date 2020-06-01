@@ -19,11 +19,29 @@ fs.readdir("./comandos", (err, f) => {
 })
 
 //Test da pokedex:
+var ranN = 0;
 client.on("messageCreate", async msg => {
+	ranN++;
+	if(ranN == 4){
+		ranN = 0;
+		var rnd = Math.floor(Math.random() * 3);
+		if(rnd == 1){
+			let oCanal = client.getChannel("694901921458421761")
+			pokedex.getPokedexByName("kanto").then(a => {
+				var objPoke = a.pokemon_entries[Math.floor(Math.random() * a.pokemon_entries.length)];
+				oCanal.createMessage({embed: {
+					title: "Random Pokemon Spawn!",
+					image: {
+						url: `https://img.pokemondb.net/artwork/${objPoke.pokemon_species.name}.jpg`
+					}
+				}})
+			})
+		}
+	}
+
 	if (msg.content.startsWith("poke")) {
 		try {
 			const pokemon = await pokedex.getPokemonByName(msg.content.split(" ")[1].toLowerCase());
-			console.log(pokemon)
 			msg.channel.createMessage({
 				embed: {
 					title: "Pokemon Info",
